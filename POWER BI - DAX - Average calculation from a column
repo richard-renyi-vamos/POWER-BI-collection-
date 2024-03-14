@@ -1,0 +1,1 @@
+Average_Column_A = AVERAGE(Table_Name[Column_A])

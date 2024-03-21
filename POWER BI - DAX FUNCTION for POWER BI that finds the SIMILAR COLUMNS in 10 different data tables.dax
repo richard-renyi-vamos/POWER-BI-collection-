@@ -1,0 +1,25 @@
+SimilarColumns = 
+VAR AllColumns = 
+    UNION(
+        SUMMARIZECOLUMNS("TableName", VALUES('Table1'[Column1]), "ColumnName", "Column1"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table1'[Column2]), "ColumnName", "Column2"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table2'[Column1]), "ColumnName", "Column1"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table2'[Column2]), "ColumnName", "Column2"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table3'[Column1]), "ColumnName", "Column1"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table3'[Column2]), "ColumnName", "Column2"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table4'[Column1]), "ColumnName", "Column1"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table4'[Column2]), "ColumnName", "Column2"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table5'[Column1]), "ColumnName", "Column1"),
+        SUMMARIZECOLUMNS("TableName", VALUES('Table5'[Column2]), "ColumnName", "Column2")
+    )
+RETURN
+    FILTER(
+        AllColumns,
+        CALCULATE(
+            COUNTROWS(AllColumns),
+            FILTER(
+                AllColumns,
+                [ColumnName] = EARLIER([ColumnName])
+            )
+        ) >= 2
+    )
